@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+
 namespace coffeebeans.backend.Infra;
 
 public static class DotEnvConfig
