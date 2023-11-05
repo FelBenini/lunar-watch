@@ -1,6 +1,6 @@
-namespace coffeebeans.backend.Models;
+namespace coffeebeans.backend;
 
-public static class UserRoles
+public class UserRoles
 {
   public const string Admin = "Admin";
   public const string User = "User";
