@@ -11,7 +11,7 @@ using coffeebeans.backend.Infra;
 namespace backend.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20231106204234_InitialMigration")]
+    [Migration("20231106224231_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -244,10 +244,21 @@ namespace backend.Migrations
 
             modelBuilder.Entity("coffeebeans.backend.Models.Profile", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("UserId");
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Profiles");
                 });
