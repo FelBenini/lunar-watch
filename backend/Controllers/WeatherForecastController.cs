@@ -16,13 +16,13 @@ public class WeatherForecastController : ControllerBase
 
     public WeatherForecastController(ILogger<WeatherForecastController> logger)
     {
-        _logger = logger;
+      _logger = logger;
     }
 
     [Authorize]
     [HttpGet(Name = "GetWeatherForecast")]
     public IActionResult Get()
     {
-        return Ok();
+        return Ok(User.Identity.Name + User.Claims);
     }
 }

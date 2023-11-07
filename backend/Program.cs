@@ -1,5 +1,4 @@
 using System.Text;
-using coffeebeans.backend;
 using coffeebeans.backend.Infra;
 using coffeebeans.backend.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -57,6 +56,8 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<int>>()
   .AddEntityFrameworkStores<DatabaseContext>()
   .AddDefaultTokenProviders();
+
+builder.Services.AddScoped<RoleManager<IdentityRole<int>>>();
 
 builder.Services.AddAuthentication(options =>
 {

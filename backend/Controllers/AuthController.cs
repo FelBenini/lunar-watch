@@ -10,18 +10,19 @@ using Microsoft.IdentityModel.Tokens;
 namespace coffeebeans.backend.Controllers;
 
 [ApiController]
-[Route("/api/[controller]")]
+[Route("/api/auth")]
 public class AuthController : ControllerBase
 {
   private readonly UserManager<ApplicationUser> _userManager;
-  private readonly DatabaseContext _context;
+  private readonly RoleManager<IdentityRole<int>> _roleManager;
 
   public AuthController(
     UserManager<ApplicationUser> userManager,
-    DatabaseContext context)
+    RoleManager<IdentityRole<int>> roleManager,
+    IServiceProvider serviceProvider)
   {
     _userManager = userManager;
-    _context = context;
+    _roleManager = roleManager;
   }
 
   [HttpPost]
@@ -36,7 +37,8 @@ public class AuthController : ControllerBase
       var authClaims = new List<Claim>
       {
         new Claim(ClaimTypes.Name, user.UserName),
-        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        new Claim(ClaimTypes.Email, user.Email),
       };
 
       foreach (var userRole in userRoles)
@@ -57,25 +59,37 @@ public class AuthController : ControllerBase
 
   [HttpPost]
   [Route("register")]
-  public async Task<IActionResult> Register([FromBody] RegisterModel model) {
+  public async Task<IActionResult> Register([FromBody] RegisterModel model)
+  {
     var userExists = await _userManager.FindByNameAsync(model.Username);
-    if (userExists != null) {
+    if (userExists != null)
+    {
       return Conflict("User already exists");
     }
-    ApplicationUser user = new() {
+    ApplicationUser user = new()
+    {
       Email = model.Email,
       UserName = model.Username,
       SecurityStamp = Guid.NewGuid().ToString(),
-      Profile = new() {
+      Profile = new()
+      {
         Username = model.Username
       }
     };
-
     var result = await _userManager.CreateAsync(user, model.Password);
     if (!result.Succeeded)
     {
       return BadRequest(result);
     }
+
+    var roleExists = await _roleManager.RoleExistsAsync(UserRoles.User);
+
+    if (!roleExists) {
+      await CreateRoles();
+    }
+
+    await _userManager.AddToRoleAsync(user, UserRoles.User);
+
     return Ok(result);
   }
 
@@ -91,4 +105,21 @@ public class AuthController : ControllerBase
 
     return token;
   }
+
+  private async Task CreateRoles()
+  {
+    string[] roleNames = { "Admin", "User" };
+    IdentityResult roleResult;
+
+    foreach (var roleName in roleNames)
+    {
+      var roleExist = await _roleManager.RoleExistsAsync(roleName);
+
+      if (!roleExist)
+      {
+        roleResult = await _roleManager.CreateAsync(new IdentityRole<int>(roleName));
+      }
+    }
+  }
+
 }

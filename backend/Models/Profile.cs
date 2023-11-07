@@ -8,7 +8,7 @@ public class Profile {
   [Key, Required, NotNull]
   public int Id { get; set; }
   [Required, NotNull]
-  public string Username { get; set; }
+  public string? Username { get; set; }
   [Required, NotNull]
   public int UserId { get; set; }
   public ApplicationUser? User { get; set; }
