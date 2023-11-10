@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using coffeebeans.backend.Infra;
+using lunarwatch.backend.Infra;
 
 #nullable disable
 
 namespace backend.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20231106224231_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20231110192558_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -148,7 +148,7 @@ namespace backend.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("coffeebeans.backend.Models.ApplicationUser", b =>
+            modelBuilder.Entity("lunarwatch.backend.Models.ApplicationUser", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -213,7 +213,7 @@ namespace backend.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("coffeebeans.backend.Models.Post", b =>
+            modelBuilder.Entity("lunarwatch.backend.Models.Post", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -242,7 +242,7 @@ namespace backend.Migrations
                     b.ToTable("Posts");
                 });
 
-            modelBuilder.Entity("coffeebeans.backend.Models.Profile", b =>
+            modelBuilder.Entity("lunarwatch.backend.Models.Profile", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -274,7 +274,7 @@ namespace backend.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("coffeebeans.backend.Models.ApplicationUser", null)
+                    b.HasOne("lunarwatch.backend.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -283,7 +283,7 @@ namespace backend.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("coffeebeans.backend.Models.ApplicationUser", null)
+                    b.HasOne("lunarwatch.backend.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -298,7 +298,7 @@ namespace backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("coffeebeans.backend.Models.ApplicationUser", null)
+                    b.HasOne("lunarwatch.backend.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -307,25 +307,25 @@ namespace backend.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("coffeebeans.backend.Models.ApplicationUser", null)
+                    b.HasOne("lunarwatch.backend.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("coffeebeans.backend.Models.Profile", b =>
+            modelBuilder.Entity("lunarwatch.backend.Models.Profile", b =>
                 {
-                    b.HasOne("coffeebeans.backend.Models.ApplicationUser", "User")
+                    b.HasOne("lunarwatch.backend.Models.ApplicationUser", "User")
                         .WithOne("Profile")
-                        .HasForeignKey("coffeebeans.backend.Models.Profile", "UserId")
+                        .HasForeignKey("lunarwatch.backend.Models.Profile", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("coffeebeans.backend.Models.ApplicationUser", b =>
+            modelBuilder.Entity("lunarwatch.backend.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Profile")
                         .IsRequired();
