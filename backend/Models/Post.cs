@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
-namespace coffeebeans.backend.Models;
+namespace lunarwatch.backend.Models;
 
 public class Post
 {

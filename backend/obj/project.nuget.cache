@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "o+C5HUrGeRdpqPfNjOXKIMs2kZMb1QUKXEFUdx1m/lulNRVumXo5s9TvHJVV6ltVM6UANAo+sSt0TyGgzMTHUw==",
+  "dgSpecHash": "iBul3Bte452cYHDh42tzbgne3fvAAEQP74MMIzhPMKsF7CT7H2gF/j15saGkIDmfy872IapQDCgQ8KPDmsGl/A==",
   "success": true,
-  "projectFilePath": "/home/felipe/Desktop/projects/csharp/coffeebeans/backend/backend.csproj",
+  "projectFilePath": "/home/felipe/Desktop/projects/csharp/lunarwatch/backend/backend.csproj",
   "expectedPackageFiles": [
     "/home/felipe/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/home/felipe/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/7.0.13/microsoft.aspnetcore.authentication.jwtbearer.7.0.13.nupkg.sha512",

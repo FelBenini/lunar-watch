@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace coffeebeans.backend.Models;
+namespace lunarwatch.backend.Models;
 
 public class ApplicationUser : IdentityUser<int>
 {

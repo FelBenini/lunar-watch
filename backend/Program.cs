@@ -1,6 +1,6 @@
 using System.Text;
-using coffeebeans.backend.Infra;
-using coffeebeans.backend.Models;
+using lunarwatch.backend.Infra;
+using lunarwatch.backend.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

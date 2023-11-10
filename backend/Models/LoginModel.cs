@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace coffeebeans.backend.Models;
+namespace lunarwatch.backend.Models;
 
 public class LoginModel
 {

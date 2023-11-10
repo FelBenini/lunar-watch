@@ -1,9 +1,9 @@
-using coffeebeans.backend.Models;
+using lunarwatch.backend.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace coffeebeans.backend.Infra;
+namespace lunarwatch.backend.Infra;
 
 public class DatabaseContext: IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
 {

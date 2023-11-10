@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace coffeebeans.backend.Controllers;
+namespace lunarwatch.backend.Controllers;
 
 [ApiController]
 [Route("[controller]")]

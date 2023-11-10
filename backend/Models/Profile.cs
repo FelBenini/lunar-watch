@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
-namespace coffeebeans.backend.Models;
+namespace lunarwatch.backend.Models;
 
 public class Profile {
   [Key, Required, NotNull]

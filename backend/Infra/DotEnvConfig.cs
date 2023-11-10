@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace coffeebeans.backend.Infra;
+namespace lunarwatch.backend.Infra;
 
 public static class DotEnvConfig
 {
