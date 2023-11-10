@@ -1,7 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using coffeebeans.backend.Infra;
 using coffeebeans.backend.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -18,8 +17,7 @@ public class AuthController : ControllerBase
 
   public AuthController(
     UserManager<ApplicationUser> userManager,
-    RoleManager<IdentityRole<int>> roleManager,
-    IServiceProvider serviceProvider)
+    RoleManager<IdentityRole<int>> roleManager)
   {
     _userManager = userManager;
     _roleManager = roleManager;
@@ -61,6 +59,9 @@ public class AuthController : ControllerBase
   [Route("register")]
   public async Task<IActionResult> Register([FromBody] RegisterModel model)
   {
+    if (model.Username == null || model.Password == null) {
+      return BadRequest();
+    }
     var userExists = await _userManager.FindByNameAsync(model.Username);
     if (userExists != null)
     {
@@ -95,7 +96,7 @@ public class AuthController : ControllerBase
 
   private JwtSecurityToken GetToken(List<Claim> authClaims)
   {
-    var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_SECRET_KEY")));
+    var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_SECRET_KEY") ?? "another_secret_keyifnotset"));
 
     var token = new JwtSecurityToken(
       expires: DateTime.Now.AddDays(7),
