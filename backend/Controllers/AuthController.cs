@@ -109,6 +109,7 @@ public class AuthController : ControllerBase
 
   private async Task CreateRoles()
   {
+    // create the roles for users
     string[] roleNames = { "Admin", "User" };
     IdentityResult roleResult;
 
