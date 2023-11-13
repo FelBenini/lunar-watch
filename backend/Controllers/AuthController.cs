@@ -111,15 +111,13 @@ public class AuthController : ControllerBase
   {
     // create the roles for users
     string[] roleNames = { "Admin", "User" };
-    IdentityResult roleResult;
-
     foreach (var roleName in roleNames)
     {
       var roleExist = await _roleManager.RoleExistsAsync(roleName);
 
       if (!roleExist)
       {
-        roleResult = await _roleManager.CreateAsync(new IdentityRole<int>(roleName));
+        IdentityResult roleResult = await _roleManager.CreateAsync(new IdentityRole<int>(roleName));
       }
     }
   }
