@@ -3,6 +3,7 @@ using lunarwatch.backend.Infra;
 using lunarwatch.backend.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using lunarwatch.backend.Services;
 
 namespace lunarwatch.backend.Controllers;
 
@@ -12,11 +13,13 @@ public class ProfileController : ControllerBase
 {
   private readonly UserManager<ApplicationUser> _userManager;
   private readonly DatabaseContext _databaseContext;
+  private readonly ProfileService _profileSerivce;
 
-  public ProfileController(UserManager<ApplicationUser> userManager, DatabaseContext databaseContext)
+  public ProfileController(UserManager<ApplicationUser> userManager, DatabaseContext databaseContext, ProfileService profileService)
   {
     _userManager = userManager;
     _databaseContext = databaseContext;
+    _profileSerivce = profileService;
   }
 
   [HttpGet("me")]
@@ -30,13 +33,15 @@ public class ProfileController : ControllerBase
 
     var user = await _userManager.FindByNameAsync(username);
     _databaseContext.Entry(user).Reference(u => u.Profile).Load();
-    return Ok(new UserConvertToProfileDTO(user.Profile));
+    return Ok(_profileSerivce.convertToProfileDTO(user.Profile));
   }
 
-  [HttpGet("all")]
-  public async Task<IActionResult> allProfiles()
+  [HttpGet]
+  public async Task<IActionResult> getByUsername([FromQuery] string? username)
   {
-    var users = _databaseContext.Profiles.Select(p => new UserConvertToProfileDTO(p));
-    return Ok(users);
+    if (username == null) return BadRequest();
+    Profile profile = _databaseContext.Profiles.FirstOrDefault(p => p.Username == username);
+    if (profile != null) return Ok(_profileSerivce.convertToProfileDTO(profile));
+    return NotFound();
   }
 }

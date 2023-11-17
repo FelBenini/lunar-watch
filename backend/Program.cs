@@ -2,6 +2,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using lunarwatch.backend.Infra;
 using lunarwatch.backend.Models;
+using lunarwatch.backend.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -79,6 +80,8 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options => options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
+builder.Services.AddScoped<ProfileService, ProfileService>();
 
 var app = builder.Build();
 
