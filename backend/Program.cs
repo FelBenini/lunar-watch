@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using lunarwatch.backend.Infra;
 using lunarwatch.backend.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -76,6 +77,8 @@ builder.Services.AddAuthentication(options =>
     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_SECRET_KEY")))
   };
 });
+
+builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options => options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 var app = builder.Build();
 
