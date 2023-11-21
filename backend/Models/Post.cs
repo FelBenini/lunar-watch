@@ -17,9 +17,8 @@ public class Post
   [Required, NotNull]
   public int ProfileId { get; set; }
 
-  public Post(int id, string title, string content, string postUrl, int profileId)
+  public Post(string title, string content, string postUrl, int profileId)
   {
-    Id = id;
     Title = title;
     Content = content;
     PostUrl = postUrl;
