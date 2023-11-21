@@ -1,9 +1,9 @@
-using lunarwatch.backend.DTO;
 using lunarwatch.backend.Infra;
 using lunarwatch.backend.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using lunarwatch.backend.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace lunarwatch.backend.Controllers;
 
@@ -25,7 +25,7 @@ public class ProfileController : ControllerBase
   [HttpGet("me")]
   public async Task<IActionResult> MyProfile()
   {
-    string username = User.Identity.Name;
+    string? username = User.Identity?.Name;
     if (username == null)
     {
       return NotFound();
@@ -40,7 +40,7 @@ public class ProfileController : ControllerBase
   public async Task<IActionResult> getByUsername([FromQuery] string? username)
   {
     if (username == null) return BadRequest();
-    Profile profile = _databaseContext.Profiles.FirstOrDefault(p => p.Username == username);
+    Profile profile = await _databaseContext.Profiles.FirstOrDefaultAsync(p => p.Username == username);
     if (profile != null) return Ok(_profileSerivce.convertToProfileDTO(profile));
     return NotFound();
   }
