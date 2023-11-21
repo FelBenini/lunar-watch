@@ -4,7 +4,7 @@ using lunarwatch.backend.Models;
 namespace lunarwatch.backend.Services;
 
 public class ProfileService {
-  public UserConvertToProfileDTO convertToProfileDTO(Profile profile)
+  public UserConvertToProfileDTO ConvertToProfileDTO(Profile profile)
   {
     return new UserConvertToProfileDTO(profile);
   }

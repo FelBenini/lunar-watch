@@ -33,7 +33,7 @@ public class ProfileController : ControllerBase
 
     var user = await _userManager.FindByNameAsync(username);
     _databaseContext.Entry(user).Reference(u => u.Profile).Load();
-    return Ok(_profileSerivce.convertToProfileDTO(user.Profile));
+    return Ok(_profileSerivce.ConvertToProfileDTO(user.Profile));
   }
 
   [HttpGet]
@@ -41,7 +41,7 @@ public class ProfileController : ControllerBase
   {
     if (username == null) return BadRequest();
     Profile profile = await _databaseContext.Profiles.FirstOrDefaultAsync(p => p.Username == username);
-    if (profile != null) return Ok(_profileSerivce.convertToProfileDTO(profile));
+    if (profile != null) return Ok(_profileSerivce.ConvertToProfileDTO(profile));
     return NotFound();
   }
 }

@@ -9,7 +9,12 @@ public class Profile {
   public int Id { get; set; }
   [Required, NotNull]
   public string? Username { get; set; }
+  public string? DisplayName { get; set; }
   [Required, NotNull]
   public int UserId { get; set; }
   public ApplicationUser? User { get; set; }
+  public int FollowersCount { get; set; } = 0;
+  public int FollowingCount { get; set; } = 0;
+  public DateTime? CreatedAt { get; set; } = DateTime.Now;
+  public int PostCount { get; set; } = 0;
 }
