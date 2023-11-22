@@ -23,8 +23,8 @@ public class Reaction
 
 public enum ReactionType
 {
-  Like,
-  Heart,
-  Angry,
-  Applaud
+  Like = 0,
+  Heart = 1,
+  Angry = 2,
+  Applaud = 3
 }
