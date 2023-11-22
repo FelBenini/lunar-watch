@@ -17,4 +17,5 @@ public class DatabaseContext: IdentityDbContext<ApplicationUser, IdentityRole<in
 
   public DbSet<Post> Posts { get; set; }
   public DbSet<Profile> Profiles { get; set; }
+  public DbSet<Reaction> Reactions { get; set; }
 }
