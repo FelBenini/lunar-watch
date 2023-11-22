@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using lunarwatch.backend.Infra;
 
@@ -10,9 +11,11 @@ using lunarwatch.backend.Infra;
 namespace backend.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20231122215449_AddedComment")]
+    partial class AddedComment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -234,26 +237,6 @@ namespace backend.Migrations
                     b.HasIndex("CommentId");
 
                     b.ToTable("Comments");
-                });
-
-            modelBuilder.Entity("lunarwatch.backend.Models.CommentReaction", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("CommentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProfileId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReactionType")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CommentReactions");
                 });
 
             modelBuilder.Entity("lunarwatch.backend.Models.Post", b =>

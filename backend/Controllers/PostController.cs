@@ -2,10 +2,8 @@ using lunarwatch.backend.DTO;
 using lunarwatch.backend.Infra;
 using lunarwatch.backend.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace lunarwatch.backend.Controllers;
 

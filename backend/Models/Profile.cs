@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
 namespace lunarwatch.backend.Models;
@@ -17,4 +16,6 @@ public class Profile {
   public int FollowingCount { get; set; } = 0;
   public DateTime? CreatedAt { get; set; } = DateTime.Now;
   public int PostCount { get; set; } = 0;
+  public string? ProfilePicture { get; set; } = null;
+  public string? BannerPicture { get; set; } = null;
 }

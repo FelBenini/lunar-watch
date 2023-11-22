@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace lunarwatch.backend.Infra;
 
-public class DatabaseContext: IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
+public class DatabaseContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
 {
   public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
   {
@@ -18,4 +18,6 @@ public class DatabaseContext: IdentityDbContext<ApplicationUser, IdentityRole<in
   public DbSet<Post> Posts { get; set; }
   public DbSet<Profile> Profiles { get; set; }
   public DbSet<Reaction> Reactions { get; set; }
+  public DbSet<Comment> Comments { get; set; }
+  public DbSet<CommentReaction> CommentReactions { get; set; }
 }
