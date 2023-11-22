@@ -33,6 +33,9 @@ public class CommentController: ControllerBase
       Content = body.Content
     };
 
+    _databaseContext.Comments.Add(comment);
+    _databaseContext.SaveChanges();
+
     return Ok(comment);
   }
 }
