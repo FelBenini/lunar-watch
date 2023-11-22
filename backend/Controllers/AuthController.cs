@@ -114,7 +114,6 @@ public class AuthController : ControllerBase
   {
     string? token = Request.Headers["Authorization"];
     token = token.Replace("Bearer ", "");
-    Console.WriteLine(token);
     var session = new JwtSecurityTokenHandler().ReadJwtToken(token);
     return Ok(session);
   }
