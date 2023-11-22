@@ -41,7 +41,7 @@ public class PostController : ControllerBase
     return CreatedAtAction(nameof(GetPostByProfileAndTitle), new {title = post.Title, username = profile.Username});
   }
 
-  [HttpPut("publish")]
+  [HttpPatch("publish")]
   [Authorize]
   public async Task<IActionResult> PublishPost(int id)
   {

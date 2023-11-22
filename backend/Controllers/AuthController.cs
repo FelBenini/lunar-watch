@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using lunarwatch.backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -107,6 +108,17 @@ public class AuthController : ControllerBase
     return token;
   }
 
+  [HttpGet("session")]
+  [Authorize]
+  public async Task<IActionResult> GetSession()
+  {
+    string? token = Request.Headers["Authorization"];
+    token = token.Replace("Bearer ", "");
+    Console.WriteLine(token);
+    var session = new JwtSecurityTokenHandler().ReadJwtToken(token);
+    return Ok(session);
+  }
+
   private async Task CreateRoles()
   {
     // create the roles for users
@@ -121,5 +133,4 @@ public class AuthController : ControllerBase
       }
     }
   }
-
 }
