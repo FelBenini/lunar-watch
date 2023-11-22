@@ -14,4 +14,5 @@ public class Comment
   public ICollection<Comment>? Comments { get; set; } = new List<Comment>();
   public int? CommentId { get; set; } 
   public int? PostId { get; set; }
+  public int ProfileId { get; set; }
 }
