@@ -92,12 +92,14 @@ public class PostController : ControllerBase
     if (reactionCheck != null)
     {
       _databaseContext.Reactions.Remove(reactionCheck);
+      await _databaseContext.Database.ExecuteSqlRawAsync("UPDATE Posts SET ReactionCount = ReactionCount - 1 WHERE Id = {0}", postId);
       _databaseContext.SaveChanges();
       return Ok("reaction removed");
     }
 
     Reaction reaction = new Reaction(postId, profile.Id, body.ReactionType);
     await _databaseContext.Reactions.AddAsync(reaction);
+    await _databaseContext.Database.ExecuteSqlRawAsync("UPDATE Posts SET ReactionCount = ReactionCount + 1 WHERE Id = {0}", postId);
     _databaseContext.SaveChanges();
     return Ok("reaction inserted");
   }
