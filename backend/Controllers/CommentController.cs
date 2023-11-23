@@ -64,11 +64,24 @@ public class CommentController: ControllerBase
   [HttpGet]
   public IActionResult GetAComment(int commentId)
   {
-    //TODO: Figure this shit out
     Comment? comment = _databaseContext.Comments.Include(c => c.Profile).FirstOrDefault(c => c.Id == commentId);
     PopulateComment(comment);
     if (comment == null) return NotFound();
     return Ok(comment);
+  }
+
+  [HttpGet("post")]
+  public async Task<IActionResult> GetCommentsFromPost(int postId)
+  {
+    var post = await _databaseContext.Posts.Where(p => p.Id == postId && p.Published == true).Select(p => new { p.Id }).FirstOrDefaultAsync();
+    if (post == null) return NotFound("Post was not found");
+
+    List<Comment> comments = _databaseContext.Comments.Where(c => c.PostId == postId).ToList();
+    foreach (Comment comm in comments)
+    {
+      PopulateComment(comm);
+    }
+    return Ok(comments);
   }
 
   private Comment PopulateComment(Comment comment)
