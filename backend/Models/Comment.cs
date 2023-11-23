@@ -11,8 +11,9 @@ public class Comment
   [Required, NotNull]
   public string Content { get; set; }
   public int? ReactionCount { get; set; } = 0;
-  public ICollection<Comment>? Comments { get; set; } = new List<Comment>();
+  public virtual ICollection<Comment>? Comments { get; set; } = new List<Comment>();
   public int? CommentId { get; set; } 
   public int? PostId { get; set; }
   public int ProfileId { get; set; }
+  public Profile Profile { get; set; }
 }

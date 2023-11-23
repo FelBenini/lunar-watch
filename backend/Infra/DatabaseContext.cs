@@ -13,6 +13,10 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser, IdentityRole<i
   protected override void OnModelCreating(ModelBuilder builder)
   {
     base.OnModelCreating(builder);
+    builder.Entity<Comment>()
+    .HasMany(c => c.Comments)
+    .WithOne()
+    .HasForeignKey(c => c.CommentId);
   }
 
   public DbSet<Post> Posts { get; set; }

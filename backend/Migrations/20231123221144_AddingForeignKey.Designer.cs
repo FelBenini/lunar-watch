@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using lunarwatch.backend.Infra;
 
@@ -10,9 +11,11 @@ using lunarwatch.backend.Infra;
 namespace backend.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20231123221144_AddingForeignKey")]
+    partial class AddingForeignKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -296,8 +299,6 @@ namespace backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProfileId");
-
                     b.ToTable("Posts");
                 });
 
@@ -420,17 +421,6 @@ namespace backend.Migrations
                         .WithMany("Comments")
                         .HasForeignKey("CommentId");
 
-                    b.HasOne("lunarwatch.backend.Models.Profile", "Profile")
-                        .WithMany()
-                        .HasForeignKey("ProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Profile");
-                });
-
-            modelBuilder.Entity("lunarwatch.backend.Models.Post", b =>
-                {
                     b.HasOne("lunarwatch.backend.Models.Profile", "Profile")
                         .WithMany()
                         .HasForeignKey("ProfileId")

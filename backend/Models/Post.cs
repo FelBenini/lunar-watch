@@ -16,6 +16,7 @@ public class Post
   public int ReactionCount { get; set; } = 0;
   [Required, NotNull]
   public int ProfileId { get; set; }
+  public Profile Profile { get; set; }
   public bool? Published { get; set; } = false;
   public DateTime? PublishedAt { get; set; }
   public string? Image { get; set; }
