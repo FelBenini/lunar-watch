@@ -84,6 +84,35 @@ public class CommentController: ControllerBase
     return Ok(comments);
   }
 
+  [HttpPost("react")]
+  [Authorize]
+  public async Task<IActionResult> ReactToComment(int commentId, [FromBody] ReactionRequestDTO body)
+  {
+    Profile? profile = await _databaseContext.Profiles.FirstOrDefaultAsync(p => p.Username == User.Identity.Name);
+    Comment? comment = await _databaseContext.Comments.FirstOrDefaultAsync(c => c.Id == commentId);
+    if (comment == null) return NotFound("Comment does not exist");
+    CommentReaction? checkForReaction = await _databaseContext.CommentReactions.Where(c => c.ProfileId == profile.Id && c.CommentId == comment.Id).FirstOrDefaultAsync();
+
+    if (checkForReaction == null)
+    {
+      CommentReaction reaction = new()
+      {
+        CommentId = commentId,
+        ProfileId = profile.Id,
+        ReactionType = body.ReactionType
+      };
+      await _databaseContext.Database.ExecuteSqlRawAsync("UPDATE Comments SET ReactionCount = ReactionCount + 1 WHERE Id = {0}", commentId);
+      _databaseContext.CommentReactions.Add(reaction);
+      _databaseContext.SaveChanges();
+      return Ok("Reaction added");
+    }
+
+    _databaseContext.CommentReactions.Remove(checkForReaction);
+    await _databaseContext.Database.ExecuteSqlRawAsync("UPDATE Comments SET ReactionCount = ReactionCount - 1 WHERE Id = {0}", commentId);
+    _databaseContext.SaveChanges();
+    return Ok("Reaction removed");
+  }
+
   private Comment PopulateComment(Comment comment)
   {
     Comment finalComment = comment;
