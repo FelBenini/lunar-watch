@@ -24,4 +24,5 @@ public class DatabaseContext : IdentityDbContext<ApplicationUser, IdentityRole<i
   public DbSet<Reaction> Reactions { get; set; }
   public DbSet<Comment> Comments { get; set; }
   public DbSet<CommentReaction> CommentReactions { get; set; }
+  public DbSet<Follower> Followers { get; set; }
 }

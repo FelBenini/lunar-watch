@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using lunarwatch.backend.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace lunarwatch.backend.Controllers;
 
@@ -23,14 +24,10 @@ public class ProfileController : ControllerBase
   }
 
   [HttpGet("me")]
+  [Authorize]
   public async Task<IActionResult> MyProfile()
   {
     string? username = User.Identity?.Name;
-    if (username == null)
-    {
-      return NotFound();
-    }
-
     var user = await _userManager.FindByNameAsync(username);
     _databaseContext.Entry(user).Reference(u => u.Profile).Load();
     return Ok(_profileSerivce.ConvertToProfileDTO(user.Profile));
