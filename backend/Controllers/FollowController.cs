@@ -20,12 +20,22 @@ public class FollowController : ControllerBase
   public IActionResult GetFollowersFromAProfile(string username, int page = 1)
   {
     int pageNum = page - 1;
-    var profile = _databaseContext.Profiles.Select(p => new { p.Username }).FirstOrDefault(p => p.Username == username);
+    var profile = _databaseContext.Profiles.Select(p => new { p.Username, p.Id }).FirstOrDefault(p => p.Username == username);
     if (profile == null) return NotFound("Profile does not exist");
 
-    List<Profile> followers = _databaseContext.Followers.Select(p => p.FollowerProfile).Take(25).Skip(pageNum * 25).ToList();
+    var followers = _databaseContext.Followers.Include("FollowerProfile").Where(f => f.ProfileBeingFollowedId == profile.Id).Take(25).Skip(pageNum * 25).ToList();
 
-    return Ok(followers);
+    return Ok(ReturnFollowerProfilesOnly(followers));
+  }
+
+  [HttpGet("following")]
+  public IActionResult GetProfilesFollowedByUser(string username, int page = 1)
+  {
+    var profile = _databaseContext.Profiles.Select(p => new { p.Username, p.Id }).FirstOrDefault(p => p.Username == username);
+    if (profile == null) return NotFound("Profile does not exist");
+
+    List<Follower> followingProfiles = _databaseContext.Followers.Include("ProfileBeingFollowed").Where(f => f.FollowerProfileId == profile.Id).Take(25).Skip((page - 1) * 25).ToList();
+    return Ok(ReturnFollowedProfilesOnly(followingProfiles));
   }
 
   [HttpPost("toggle-follow")]
@@ -56,5 +66,25 @@ public class FollowController : ControllerBase
     _databaseContext.Followers.Remove(followExists);
     await _databaseContext.SaveChangesAsync();
     return Ok("Follow removed");
+  }
+
+  private List<Profile> ReturnFollowedProfilesOnly(List<Follower> followers)
+  {
+    List<Profile> followersList = new List<Profile>();
+    foreach (Follower foll in followers)
+    {
+      followersList.Add(foll.ProfileBeingFollowed);
+    }
+    return followersList;
+  }
+
+    private List<Profile> ReturnFollowerProfilesOnly(List<Follower> followers)
+  {
+    List<Profile> followersList = new List<Profile>();
+    foreach (Follower foll in followers)
+    {
+      followersList.Add(foll.FollowerProfile);
+    }
+    return followersList;
   }
 }
