@@ -1,6 +1,6 @@
 namespace lunarwatch.backend.DTO;
 
-public class PostRequestDTO
+public interface PostRequestDTO
 {
   public string Title { get; set; }
   public string Content { get; set; }

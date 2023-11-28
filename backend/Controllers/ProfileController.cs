@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using lunarwatch.backend.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using lunarwatch.backend.DTO;
 
 namespace lunarwatch.backend.Controllers;
 
