@@ -82,6 +82,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options => options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder.Services.AddScoped<ProfileService, ProfileService>();
+builder.Services.AddScoped<ImageUploaderService, ImageUploaderService>();
 
 var app = builder.Build();
 
@@ -91,6 +92,8 @@ if (app.Environment.IsDevelopment())
   app.UseSwagger();
   app.UseSwaggerUI();
 }
+
+app.UseStaticFiles();
 
 app.UseHttpsRedirection();
 

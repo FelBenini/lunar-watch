@@ -10,6 +10,7 @@ public class UserConvertToProfileDTO
   public int FollowersCount { get; set; }
   public int FollowingCount { get; set; }
   public DateTime? CreatedAt { get; set; }
+  public string? ProfilePicture { get; set; }
   public UserConvertToProfileDTO(Profile profile)
   {
     Id = profile.Id;
@@ -18,5 +19,6 @@ public class UserConvertToProfileDTO
     FollowersCount = profile.FollowersCount;
     FollowingCount = profile.FollowingCount;
     CreatedAt = profile.CreatedAt;
+    ProfilePicture = profile.ProfilePicture;
   }
 }

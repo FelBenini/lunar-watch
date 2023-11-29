@@ -16,12 +16,14 @@ public class ProfileController : ControllerBase
   private readonly UserManager<ApplicationUser> _userManager;
   private readonly DatabaseContext _databaseContext;
   private readonly ProfileService _profileSerivce;
+  private readonly ImageUploaderService _imageUploaderService;
 
-  public ProfileController(UserManager<ApplicationUser> userManager, DatabaseContext databaseContext, ProfileService profileService)
+  public ProfileController(UserManager<ApplicationUser> userManager, DatabaseContext databaseContext, ProfileService profileService, ImageUploaderService imageUploaderService)
   {
     _userManager = userManager;
     _databaseContext = databaseContext;
     _profileSerivce = profileService;
+    _imageUploaderService = imageUploaderService;
   }
 
   [HttpGet("me")]
@@ -48,8 +50,19 @@ public class ProfileController : ControllerBase
   public async Task<IActionResult> ChangeDisplayName([FromBody] DisplayNameRequestDTO body)
   {
     if (body.DisplayName == null || body.DisplayName == "" || body.DisplayName == " ") return BadRequest("Display Name is invalid");
-    Profile? profile = await _databaseContext.Profiles.FirstOrDefaultAsync(p => p.Username == User.Identity.Name); 
+    Profile? profile = await _databaseContext.Profiles.FirstOrDefaultAsync(p => p.Username == User.Identity.Name);
     profile.DisplayName = body.DisplayName;
+    _databaseContext.SaveChanges();
+    return Ok(profile);
+  }
+
+  [HttpPut("update-profilepic")]
+  [Authorize]
+  public async Task<IActionResult> ChangeProfilePic(IFormFile file)
+  {
+    string path = await _imageUploaderService.UploadFileToStaticFiles(file);
+    Profile? profile = await _databaseContext.Profiles.FirstOrDefaultAsync(p => p.Username == User.Identity.Name);
+    profile.ProfilePicture = path;
     _databaseContext.SaveChanges();
     return Ok(profile);
   }

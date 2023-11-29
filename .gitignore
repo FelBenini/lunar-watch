@@ -3,3 +3,4 @@ frontend/.env
 lunarwatch.sln
 backend/obj
 backend/bin
+backend/wwwroot/img
