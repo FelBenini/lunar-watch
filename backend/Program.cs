@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SixLabors.ImageSharp.Web.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,6 +52,7 @@ builder.Services.AddSwaggerGen(options =>
 
 Console.WriteLine(connectionString);
 
+builder.Services.AddImageSharp();
 builder.Services.AddDbContext<DatabaseContext>(options =>
   options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
 );
@@ -93,6 +95,7 @@ if (app.Environment.IsDevelopment())
   app.UseSwaggerUI();
 }
 
+app.UseImageSharp();
 app.UseStaticFiles();
 
 app.UseHttpsRedirection();

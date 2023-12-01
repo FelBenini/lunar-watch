@@ -4,3 +4,4 @@ lunarwatch.sln
 backend/obj
 backend/bin
 backend/wwwroot/img
+backend/wwwroot/is-cache
