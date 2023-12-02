@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SixLabors.ImageSharp.Web.Commands;
 using SixLabors.ImageSharp.Web.DependencyInjection;
+using SixLabors.ImageSharp.Web.Processors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,7 +54,29 @@ builder.Services.AddSwaggerGen(options =>
 
 Console.WriteLine(connectionString);
 
-builder.Services.AddImageSharp();
+builder.Services.AddImageSharp(options =>
+{
+  options.OnParseCommandsAsync = c =>
+  {
+    if (c.Commands.Count == 0)
+    {
+      return Task.CompletedTask;
+    }
+
+    uint width = c.Parser.ParseValue<uint>(
+    c.Commands.GetValueOrDefault(ResizeWebProcessor.Width),
+    c.Culture);
+
+    List<uint> allowedSizes = new List<uint> {200, 400, 600, 1200, 2400};
+    if (!allowedSizes.Any(x => x == width))
+    {
+      c.Commands.Remove(ResizeWebProcessor.Width);
+    }
+    c.Commands.Remove(ResizeWebProcessor.Height);
+    return Task.CompletedTask;
+  };
+});
+
 builder.Services.AddDbContext<DatabaseContext>(options =>
   options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
 );
