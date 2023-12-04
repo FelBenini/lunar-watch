@@ -58,22 +58,7 @@ builder.Services.AddImageSharp(options =>
 {
   options.OnParseCommandsAsync = c =>
   {
-    if (c.Commands.Count == 0)
-    {
-      return Task.CompletedTask;
-    }
-
-    uint width = c.Parser.ParseValue<uint>(
-    c.Commands.GetValueOrDefault(ResizeWebProcessor.Width),
-    c.Culture);
-
-    List<uint> allowedSizes = new List<uint> {200, 400, 600, 1200, 2400};
-    if (!allowedSizes.Any(x => x == width))
-    {
-      c.Commands.Remove(ResizeWebProcessor.Width);
-    }
-    c.Commands.Remove(ResizeWebProcessor.Height);
-    return Task.CompletedTask;
+    return ImageSharpConfig.ConfigImageSharp(c);
   };
 });
 
