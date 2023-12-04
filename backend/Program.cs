@@ -86,7 +86,7 @@ builder.Services.AddAuthentication(options =>
   {
     ValidateIssuer = false,
     ValidateAudience = false,
-    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_SECRET_KEY")))
+    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_SECRET_KEY") ?? "some_other_secret_key_asafsagfaafadgsd"))
   };
 });
 
