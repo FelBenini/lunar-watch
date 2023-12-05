@@ -22,14 +22,11 @@ public static class ImageSharpConfig
     ctx.Commands.GetValueOrDefault(ResizeWebProcessor.Height),
     ctx.Culture);
 
-    List<uint> allowedSizes = new List<uint> { 200, 400, 1200, 2400 };
-    if (!thumbSizes.Any(x => x.height == height))
+    List<uint> allowedSizes = new List<uint> { 400, 1200, 2400 };
+    if (!thumbSizes.Any(x => x.height == height && x.width == width))
     {
       ctx.Commands.Remove(ResizeWebProcessor.Height);
-      if (!allowedSizes.Any(x => x == width) || !thumbSizes.Any(x => x.width == width))
-      {
-        ctx.Commands.Remove(ResizeWebProcessor.Width);
-      }
+      if (!allowedSizes.Any(x => x == width)) ctx.Commands.Remove(ResizeWebProcessor.Width);
     }
 
     return Task.CompletedTask;
