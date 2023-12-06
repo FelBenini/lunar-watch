@@ -1,6 +1,7 @@
 using lunarwatch.backend.DTO;
 using lunarwatch.backend.Infra;
 using lunarwatch.backend.Models;
+using lunarwatch.backend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,9 +13,11 @@ namespace lunarwatch.backend.Controllers;
 public class PostController : ControllerBase
 {
   private readonly DatabaseContext _databaseContext;
-  public PostController(DatabaseContext databaseContext)
+  private readonly ImageUploaderService _imageUploaderService;
+  public PostController(DatabaseContext databaseContext, ImageUploaderService imageUploaderService)
   {
     _databaseContext = databaseContext;
+    _imageUploaderService = imageUploaderService;
   }
 
   [HttpGet]
@@ -38,7 +41,7 @@ public class PostController : ControllerBase
     Post post = new Post(postRequest.Title, postRequest.Content, $"{profile?.Username}/{postRequest.Title}", profile.Id);
     await _databaseContext.Posts.AddAsync(post);
     await _databaseContext.SaveChangesAsync();
-    return CreatedAtAction(nameof(GetPostByProfileAndTitle), new {title = post.Title, username = profile.Username});
+    return CreatedAtAction(nameof(GetPostByProfileAndTitle), new { title = post.Title, username = profile.Username });
   }
 
   [HttpPatch("publish")]
@@ -60,14 +63,14 @@ public class PostController : ControllerBase
     post.PublishedAt = DateTime.Now;
 
     _databaseContext.SaveChanges();
-    return CreatedAtAction(nameof(GetPostByProfileAndTitle), new {title = post.Title, username = profile.Username});
+    return CreatedAtAction(nameof(GetPostByProfileAndTitle), new { title = post.Title, username = profile.Username });
   }
 
   [HttpGet("profile")]
   public async Task<IActionResult> GetPostsFromProfile(string username, [FromQuery] int page = 1)
   {
     int pageNum = page - 1;
-    var profile = await _databaseContext.Profiles.Where(p => p.Username == username).Select(p => new {p.Username, p.Id}).FirstOrDefaultAsync();
+    var profile = await _databaseContext.Profiles.Where(p => p.Username == username).Select(p => new { p.Username, p.Id }).FirstOrDefaultAsync();
     IEnumerable<Post> posts = _databaseContext.Posts.Where(p => p.ProfileId == profile.Id && p.Published == true).Skip(pageNum * 15).Take(15);
     return Ok(posts);
   }
@@ -102,5 +105,34 @@ public class PostController : ControllerBase
     await _databaseContext.Database.ExecuteSqlRawAsync("UPDATE Posts SET ReactionCount = ReactionCount + 1 WHERE Id = {0}", postId);
     _databaseContext.SaveChanges();
     return Ok("reaction inserted");
+  }
+
+  [HttpPatch("image")]
+  [Authorize]
+  public async Task<IActionResult> ChangePostMainImage([FromQuery] int postId, IFormFile file)
+  {
+    Profile? profile = await _databaseContext.Profiles.FirstOrDefaultAsync(p => p.Username == User.Identity.Name);
+    Post? post = _databaseContext.Posts.FirstOrDefault(p => p.Id == postId && p.ProfileId == profile.Id);
+    if (post == null) return NotFound();
+    string imagePath = await _imageUploaderService.UploadFileToStaticFiles(file);
+    post.Image = imagePath;
+    await _databaseContext.SaveChangesAsync();
+    return Ok(post);
+  }
+
+  [HttpPut]
+  [Authorize]
+  public async Task<IActionResult> UpdatePost([FromQuery] int postId, [FromBody] PostRequestDTO body)
+  {
+    Profile? profile = await _databaseContext.Profiles.FirstOrDefaultAsync(p => p.Username == User.Identity.Name);
+    Post? post = await _databaseContext.Posts.FirstOrDefaultAsync(p => p.Id == postId && p.ProfileId == profile.Id);
+    if (post == null) return NotFound();
+    
+    post.Title = body.Title;
+    post.Content = body.Content;
+
+    await _databaseContext.SaveChangesAsync();
+
+    return Ok(post);
   }
 }
