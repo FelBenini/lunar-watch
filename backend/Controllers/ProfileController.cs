@@ -41,7 +41,7 @@ public class ProfileController : ControllerBase
   {
     if (username == null) return BadRequest();
     Profile? profile = await _databaseContext.Profiles.FirstOrDefaultAsync(p => p.Username == username);
-    if (profile != null) return Ok(_profileSerivce.ConvertToProfileDTO(profile));
+    if (profile != null) return Ok(_profileSerivce.ConvertToProfileDTO(profile, User.Identity?.Name));
     return NotFound();
   }
 
@@ -63,7 +63,18 @@ public class ProfileController : ControllerBase
     string path = await _imageUploaderService.UploadFileToStaticFiles(file);
     Profile? profile = await _databaseContext.Profiles.FirstOrDefaultAsync(p => p.Username == User.Identity.Name);
     profile.ProfilePicture = path;
-    _databaseContext.SaveChanges();
+    await _databaseContext.SaveChangesAsync();
+    return Ok(profile);
+  }
+
+  [HttpPut("update-bannerpic")]
+  [Authorize]
+  public async Task<IActionResult> ChangeBannerPic(IFormFile file)
+  {
+    string path = await _imageUploaderService.UploadFileToStaticFiles(file);
+    Profile? profile = await _databaseContext.Profiles.FirstOrDefaultAsync(p => p.Username == User.Identity.Name);
+    profile.BannerPicture = path;
+    await _databaseContext.SaveChangesAsync();
     return Ok(profile);
   }
 }
