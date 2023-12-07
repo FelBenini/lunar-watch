@@ -125,7 +125,7 @@ public class PostController : ControllerBase
   public async Task<IActionResult> UpdatePost([FromQuery] int postId, [FromBody] PostRequestDTO body)
   {
     Profile? profile = await _databaseContext.Profiles.FirstOrDefaultAsync(p => p.Username == User.Identity.Name);
-    Post? post = await _databaseContext.Posts.FirstOrDefaultAsync(p => p.Id == postId && p.ProfileId == profile.Id);
+    Post? post = await _databaseContext.Posts.FirstOrDefaultAsync(p => p.Id == postId && p.ProfileId == profile.Id && p.Published == false);
     if (post == null) return NotFound();
     
     post.Title = body.Title;
