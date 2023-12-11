@@ -94,6 +94,7 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
 
 builder.Services.AddScoped<ProfileService, ProfileService>();
 builder.Services.AddScoped<ImageUploaderService, ImageUploaderService>();
+builder.Services.AddScoped<PostService, PostService>();
 
 var app = builder.Build();
 
