@@ -13,11 +13,13 @@ namespace lunarwatch.backend.Controllers;
 public class PostController : ControllerBase
 {
   private readonly DatabaseContext _databaseContext;
+  private readonly PostService _postService;
   private readonly ImageUploaderService _imageUploaderService;
-  public PostController(DatabaseContext databaseContext, ImageUploaderService imageUploaderService)
+  public PostController(DatabaseContext databaseContext, ImageUploaderService imageUploaderService, PostService postService)
   {
     _databaseContext = databaseContext;
     _imageUploaderService = imageUploaderService;
+    _postService = postService;
   }
 
   [HttpGet]
@@ -27,7 +29,7 @@ public class PostController : ControllerBase
     if (profile != null)
     {
       Post? post = _databaseContext.Posts.Where(p => p.ProfileId == profile.Id && p.Title == title && p.Published == true).FirstOrDefault();
-      if (post != null) return Ok(post);
+      if (post != null) return Ok(_postService.ConvertToPostResponse(post, User?.Identity.Name));
     }
     return NotFound();
   }

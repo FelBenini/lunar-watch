@@ -20,10 +20,11 @@ public class PostService
     UserConvertToProfileDTO profileDTO = _profileService.ConvertToProfileDTO(post.Profile, requestorName);
 
     bool isLiked = false;
-    Reaction? reaction = _databaseContext.Reactions.FirstOrDefault(r => r.PostId == post.Id && r.ProfileId == profileDTO.Id);
+    var profileReq = _databaseContext.Profiles.Select(p => new { p.Id, p.Username }).Where(p => p.Username == requestorName).FirstOrDefault();
+    Reaction? reaction = _databaseContext.Reactions.FirstOrDefault(r => r.PostId == post.Id && r.ProfileId == profileReq.Id);
     if (reaction != null) isLiked = true;
 
-    return new PostResponse(post, profileDTO, isLiked);
+    return new PostResponse(post, profileDTO, isLiked, reaction?.ReactionType);
   }
 
   public PostResponse ConvertToPostResponse(Post post)
